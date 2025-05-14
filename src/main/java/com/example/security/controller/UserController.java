@@ -48,9 +48,20 @@ public class UserController {
         return ResponseEntity.ok(Collections.singletonMap("token", token));
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<List<User>> getAllUsers(HttpServletRequest request) {
         List<User> users = userDao.findAll();
         return ResponseEntity.ok(users);
-    }}
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            return ResponseEntity.ok("Logged out successfully");
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+}

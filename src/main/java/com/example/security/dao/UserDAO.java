@@ -14,23 +14,22 @@ public class UserDAO {
     private JdbcTemplate jdbcTemplate;
 
     public User findUserByUsername(String username) {
-        String sql = "SELECT * FROM Users WHERE username = ?"; // Chỉ lấy các cột cần thiết
+        String sql = "SELECT * FROM Users WHERE username = ?";
         try {
             return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), username);
         } catch (EmptyResultDataAccessException e) {
-            return null; // Trả về null nếu không tìm thấy user
+            return null;
         }
     }
 
 
     public void register(User user){
-        String sql = "INSERT INTO users (username, password, roles) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), user.getRoles());
+        String sql = "INSERT INTO users (username, password, phone, roles) VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), user.getPhone(), user.getRoles());
     }
 
     public List<User> findAll(){
         String sql = "SELECT * FROM Users";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class));
     }
-
 }

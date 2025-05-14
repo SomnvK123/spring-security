@@ -6,15 +6,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class User {
     private String username;
     private String password;
+    private Integer phone;
     private String roles;
 
 
     public User() {}
 
-    public User(String username, String password, String roles) {
+    public User(String username, String password, String roles, Integer phone) {
         this.username = username;
         this.password = password;
         this.roles = roles;
+        this.phone = phone;
+    }
+
+    public Integer getPhone() {
+        return phone;
+    }
+
+    public void setPhone(Integer phone) {
+        this.phone = phone;
     }
 
     public String getUsername() {

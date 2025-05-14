@@ -4,6 +4,7 @@ package com.example.security.controller;
 import com.example.security.config.JwtUtil;
 import com.example.security.dao.UserDAO;
 import com.example.security.model.User;
+import com.example.security.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,9 @@ public class UserController {
     
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
@@ -63,5 +67,20 @@ public class UserController {
             return ResponseEntity.ok("Logged out successfully");
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @GetMapping("/current-user")
+    public ResponseEntity<User> getCurrentUser() {
+        String username = userService.getCurrentUsername();
+        if (username != null) {
+            User user = userDao.findUserByUsername(username);
+            if (user != null) {
+                return ResponseEntity.ok(user);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 }
